@@ -33,34 +33,17 @@ class FeatureExtractor:
         self.label_encoders = {}
         
     def extract_metadata_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Extract metadata-based features"""
+        """Extract metadata-based features (excluding rating-based quality indicators)"""
         
         logger.info("Extracting metadata features...")
         
-        # User-based features
+        # User-based features (for context, not quality scoring)
         df['user_review_count'] = df.groupby('author_name')['author_name'].transform('count')
-        df['user_avg_rating'] = df.groupby('author_name')['rating'].transform('mean')
-        df['user_rating_std'] = df.groupby('author_name')['rating'].transform('std').fillna(0)
         
-        # Business-based features
+        # Business-based features (for context, not quality scoring)
         df['business_review_count'] = df.groupby('business_name')['business_name'].transform('count')
-        df['business_avg_rating'] = df.groupby('business_name')['rating'].transform('mean')
-        df['business_rating_std'] = df.groupby('business_name')['rating'].transform('std').fillna(0)
         
-        # Rating-based features
-        df['rating_deviation'] = abs(df['rating'] - df['business_avg_rating'])
-        df['is_extreme_rating'] = ((df['rating'] == 1) | (df['rating'] == 5)).astype(int)
-        df['rating_category_encoded'] = self._encode_categorical(df, 'rating_category')
-        
-        # Time-based features (if available)
-        if 'review_date' in df.columns:
-            df['review_date'] = pd.to_datetime(df['review_date'], errors='coerce')
-            df['review_year'] = df['review_date'].dt.year
-            df['review_month'] = df['review_date'].dt.month
-            df['review_day_of_week'] = df['review_date'].dt.dayofweek
-            df['is_weekend'] = df['review_day_of_week'].isin([5, 6]).astype(int)
-        
-        # Text quality indicators
+        # Text quality indicators (these are the actual quality measures)
         df['text_quality_score'] = self._calculate_text_quality_score(df)
         df['readability_score'] = self._calculate_readability_score(df)
         
@@ -247,37 +230,46 @@ class FeatureExtractor:
         return df
     
     def create_quality_labels(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Create quality labels based on various indicators"""
+        """Create quality labels based purely on review text quality and policy compliance"""
         
-        logger.info("Creating quality labels...")
+        logger.info("Creating quality labels based on review text quality...")
         
-        # Quality score based on multiple factors
+        # Quality score based purely on review quality factors (NO RATING INFLUENCE)
         quality_score = (
-            # Text quality (30%)
-            df['text_quality_score'] * 0.3 +
-            # Readability (20%)
-            (df['readability_score'] / 100) * 0.2 +
-            # Sentiment balance (15%)
-            (1 - abs(df['sentiment_polarity'])) * 0.15 +
-            # Policy compliance (35%)
+            # Text quality and readability (40%)
+            df['text_quality_score'] * 0.25 +
+            (df['readability_score'] / 100) * 0.15 +
+            # Policy compliance (45%)
             (
-                (1 - df['spam_probability']) * 0.15 +
-                (1 - df['irrelevant_probability']) * 0.1 +
+                (1 - df['spam_probability']) * 0.20 +
+                (1 - df['irrelevant_probability']) * 0.15 +
                 (1 - df['rant_indicators']) * 0.05 +
                 (1 - df['suspicious_patterns']) * 0.05
+            ) +
+            # Writing sophistication (15%)
+            (
+                df['unique_word_ratio'] * 0.10 +
+                (1 - df['capital_letter_ratio']) * 0.05  # Penalize excessive caps
             )
         )
         
         df['quality_score'] = quality_score
         
-        # Binary quality labels
-        quality_threshold = quality_score.quantile(0.7)  # Top 30% are high quality
-        df['is_high_quality'] = (quality_score >= quality_threshold).astype(int)
+        # Binary quality labels - focus on policy compliance and text quality
+        # High quality = good text quality AND no policy violations
+        high_quality_mask = (
+            (quality_score >= quality_score.quantile(0.6)) &  # Good text quality
+            (df['spam_probability'] < 0.3) &  # No spam
+            (df['irrelevant_probability'] < 0.2) &  # Relevant content
+            (df['rant_indicators'] < 0.5)  # No excessive rants
+        )
+        
+        df['is_high_quality'] = high_quality_mask.astype(int)
         
         # Multi-class quality labels
         df['quality_category'] = pd.cut(
             quality_score,
-            bins=[0, 0.3, 0.6, 1.0],
+            bins=[0, 0.4, 0.7, 1.0],
             labels=['low', 'medium', 'high'],
             include_lowest=True
         )
@@ -301,12 +293,12 @@ class FeatureExtractor:
         # Extract textual features
         textual_features = self.extract_textual_features(df, text_column)
         
-        # Combine all features
+        # Combine all features (NO RATING-BASED FEATURES)
         feature_columns = [
-            # Metadata features
-            'user_review_count', 'user_avg_rating', 'user_rating_std',
-            'business_review_count', 'business_avg_rating', 'business_rating_std',
-            'rating_deviation', 'is_extreme_rating', 'rating_category_encoded',
+            # Metadata features (context only, not quality scoring)
+            'user_review_count', 'business_review_count',
+            
+            # Text quality features
             'text_length', 'word_count', 'avg_word_length', 'unique_word_ratio',
             'exclamation_count', 'question_count', 'capital_letter_ratio', 'digit_count',
             'text_quality_score', 'readability_score',
@@ -346,13 +338,13 @@ class FeatureExtractor:
         # Top features by correlation
         top_features = correlations.head(20).to_dict()
         
-        # Feature categories
+        # Feature categories (NO RATING-BASED FEATURES)
         feature_categories = {
             'text_quality': ['text_quality_score', 'readability_score', 'text_length', 'word_count'],
             'sentiment': ['sentiment_polarity', 'sentiment_subjectivity'],
             'policy_violations': ['spam_probability', 'irrelevant_probability', 'rant_indicators'],
-            'user_behavior': ['user_review_count', 'user_avg_rating', 'rating_deviation'],
-            'business_context': ['business_review_count', 'business_avg_rating']
+            'user_behavior': ['user_review_count'],  # Context only
+            'business_context': ['business_review_count']  # Context only
         }
         
         return {

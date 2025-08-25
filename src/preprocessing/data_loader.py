@@ -22,7 +22,7 @@ class ReviewDataLoader:
         self.restaurant_df = None
         
     def load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        """Load both CSV files from the dataset"""
+        """Load the main reviews dataset"""
         
         # Load main reviews dataset
         reviews_path = self.data_dir / "reviews.csv"
@@ -32,14 +32,8 @@ class ReviewDataLoader:
         else:
             raise FileNotFoundError(f"Reviews file not found: {reviews_path}")
         
-        # Load restaurant dataset
-        restaurant_path = self.data_dir / "sepetcioglu_restaurant.csv"
-        if restaurant_path.exists():
-            self.restaurant_df = pd.read_csv(restaurant_path)
-            logger.info(f"Loaded {len(self.restaurant_df)} restaurant records from {restaurant_path}")
-        else:
-            logger.warning(f"Restaurant file not found: {restaurant_path}")
-            self.restaurant_df = pd.DataFrame()
+        # Initialize empty restaurant dataframe (no longer needed)
+        self.restaurant_df = pd.DataFrame()
         
         return self.reviews_df, self.restaurant_df
     
