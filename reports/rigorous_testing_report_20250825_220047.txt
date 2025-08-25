@@ -1,0 +1,72 @@
+
+================================================================================
+COMPREHENSIVE MODEL PERFORMANCE ANALYSIS REPORT
+================================================================================
+
+Generated on: 2025-08-25 22:00:47
+Total Models Analyzed: 2
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+Best Performing Model: xgboost (F1 Score: 0.9078)
+
+Performance Summary:
+- random_forest: F1=0.7376, Accuracy=0.7818, ROC AUC=0.9278827233372687
+- xgboost: F1=0.9078, Accuracy=0.9091, ROC AUC=0.9753049980322708
+
+================================================================================
+DETAILED ANALYSIS
+================================================================================
+
+1. MODEL COMPARISON PLOT: Shows comprehensive comparison across all metrics
+2. ROC CURVES: Displays discrimination ability of each model
+3. PRECISION-RECALL CURVES: Shows precision-recall trade-offs
+4. CONFUSION MATRICES: Visualizes classification errors
+5. METRICS HEATMAP: Easy-to-read performance comparison
+6. F1 SCORE COMPARISON: Detailed F1 score analysis
+7. ERROR ANALYSIS: False positive vs false negative breakdown
+8. THRESHOLD ANALYSIS: Optimal threshold selection
+9. CLASS PERFORMANCE: Per-class performance comparison
+10. CONFIDENCE DISTRIBUTION: Prediction confidence analysis
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+- Good performance. Consider fine-tuning for marginal improvements.
+- random_forest: Consider adjusting threshold to catch more positive cases.
+- xgboost: Consider adjusting threshold to catch more positive cases.
+
+================================================================================
+PLOTS GENERATED
+================================================================================
+All plots have been saved to: plots
+
+Files generated:
+- HTML files (interactive): Available in plots directory
+
+================================================================================
+
+
+CROSS-VALIDATION RESULTS:
+==================================================
+
+random_forest:
+  Accuracy: 0.7782 ± 0.0139
+  F1 Score: 0.7339 ± 0.0228
+
+xgboost:
+  Accuracy: 0.9418 ± 0.0071
+  F1 Score: 0.9419 ± 0.0071
+
+
+THRESHOLD ANALYSIS:
+==================================================
+
+random_forest:
+  Optimal Threshold: 0.350
+  Optimal F1 Score: 0.8801
+
+xgboost:
+  Optimal Threshold: 0.150
+  Optimal F1 Score: 0.9286

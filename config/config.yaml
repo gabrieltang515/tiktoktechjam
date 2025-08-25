@@ -1,0 +1,96 @@
+# Configuration file for Review Quality Detection Pipeline
+
+# Data processing settings
+data:
+  max_features: 2000
+  n_topics: 10
+  test_size: 0.2
+  random_state: 42
+
+# Model settings
+models:
+  # Classical ML models
+  classical:
+    - random_forest
+    - xgboost
+    - lightgbm
+    - logistic_regression
+    - ensemble
+  
+  # Transformer models (optional)
+  transformer:
+    model_name: "distilbert-base-uncased"
+    max_length: 512
+    epochs: 3
+    batch_size: 16
+
+# Feature engineering settings
+features:
+  # Text features
+  text:
+    tfidf_max_features: 2000
+    count_max_features: 1000
+    ngram_range: [1, 2]
+    min_df: 2
+    max_df: 0.95
+  
+  # Topic modeling
+  topics:
+    n_topics: 10
+    max_iter: 200
+  
+  # Sentiment analysis
+  sentiment:
+    use_textblob: true
+    use_vader: false
+
+# Policy enforcement settings
+policy:
+  # Violation thresholds
+  thresholds:
+    spam: 0.3
+    advertisement: 0.25
+    irrelevant_content: 0.2
+    rant: 0.15
+    excessive_patterns: 0.05
+  
+  # Severity levels
+  severity:
+    high: 0.7
+    medium: 0.4
+    low: 0.2
+
+# Evaluation settings
+evaluation:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - roc_auc
+    - pr_auc
+  
+  # Cross-validation
+  cv_folds: 5
+  scoring: "f1_weighted"
+
+# Output settings
+output:
+  save_models: true
+  save_reports: true
+  generate_visualizations: true
+  results_dir: "results"
+  models_dir: "models"
+  logs_dir: "logs"
+
+# Logging settings
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "pipeline.log"
+
+# Performance settings
+performance:
+  n_jobs: -1  # Use all CPU cores
+  memory_efficient: false
+  early_stopping: true
