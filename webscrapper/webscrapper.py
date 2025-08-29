@@ -9,6 +9,8 @@ HEADLESS = False
 SCROLL_PAUSE = 1.5
 MAX_REVIEWS_DEFAULT = 20
 
+# use python tester.py --per-place-max-reviews 50 --max-places 1000 to reuse same checkpoint
+
 # ---------- NEW: grid centers around Singapore ----------
 # (lat, lng, zoom)
 GRID_CENTERS = [
