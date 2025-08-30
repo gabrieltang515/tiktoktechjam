@@ -3,27 +3,27 @@
 
 # System Information
 system:
-  name: "Review Quality Detection System"
-  version: "2.0.0"
-  description: "Advanced ML system for review quality assessment and content moderation"
-  author: "Review Quality Detection Team"
-  date: "2024"
+  name: 'Review Quality Detection System'
+  version: '2.0.0'
+  description: 'Advanced ML system for review quality assessment and content moderation'
+  author: 'Review Quality Detection Team'
+  date: '2024'
 
 # Data Configuration
 data:
   # Input data settings
   input:
-    reviews_file: "data/reviews.csv"
-    restaurant_file: "data/restaurants.csv"
-    text_column: "text"
-    encoding: "utf-8"
-    
+    reviews_file: 'data/reviews.csv'
+    restaurant_file: 'data/restaurants.csv'
+    text_column: 'text'
+    encoding: 'utf-8'
+
   # Data validation settings
   validation:
     min_text_length: 10
     max_text_length: 5000
-    required_columns: ["text", "rating", "author_name", "business_name"]
-    
+    required_columns: ['text', 'rating', 'author_name', 'business_name']
+
   # Data splitting settings
   splitting:
     test_size: 0.2
@@ -41,14 +41,14 @@ feature_engineering:
     ngram_range: [1, 2]
     remove_stopwords: true
     lemmatize: true
-    
+
   # Topic modeling settings
   topic_modeling:
     n_topics: 10
     lda_max_iter: 10
     nmf_max_iter: 200
     random_state: 42
-    
+
   # Quality indicators
   quality_indicators:
     min_readability_score: 0.0
@@ -61,10 +61,10 @@ feature_engineering:
 models:
   # Model types to train
   types:
-    - "random_forest"
-    - "xgboost"
-    - "ensemble"
-    
+    - 'random_forest'
+    - 'xgboost'
+    - 'ensemble'
+
   # Random Forest settings
   random_forest:
     n_estimators: 100
@@ -72,7 +72,7 @@ models:
     min_samples_split: 2
     min_samples_leaf: 1
     random_state: 42
-    
+
   # XGBoost settings
   xgboost:
     n_estimators: 100
@@ -81,18 +81,18 @@ models:
     subsample: 0.8
     colsample_bytree: 0.8
     random_state: 42
-    
+
   # Ensemble settings
   ensemble:
-    voting_method: "soft"
-    weights: [0.3, 0.7]  # [random_forest, xgboost]
-    
+    voting_method: 'soft'
+    weights: [0.3, 0.7] # [random_forest, xgboost]
+
   # Model evaluation
   evaluation:
     cv_folds: 5
-    scoring_metrics: ["accuracy", "f1", "precision", "recall"]
+    scoring_metrics: ['accuracy', 'f1', 'precision', 'recall']
     save_models: true
-    model_format: "pickle"
+    model_format: 'pickle'
 
 # Policy Enforcement Configuration
 policy_enforcement:
@@ -101,60 +101,60 @@ policy_enforcement:
     enabled: true
     threshold: 0.3
     patterns:
-      - "buy now"
-      - "click here"
-      - "special offer"
-      - "limited time"
-      - "call now"
-      - "visit our website"
-      
+      - 'buy now'
+      - 'click here'
+      - 'special offer'
+      - 'limited time'
+      - 'call now'
+      - 'visit our website'
+
   # Advertisement detection
   advertisement_detection:
     enabled: true
     threshold: 0.2
     patterns:
-      - "discount"
-      - "promotion"
-      - "deal"
-      - "sale"
-      - "free trial"
-      - "money back guarantee"
-      
+      - 'discount'
+      - 'promotion'
+      - 'deal'
+      - 'sale'
+      - 'free trial'
+      - 'money back guarantee'
+
   # Irrelevant content detection
   irrelevant_content:
     enabled: true
     threshold: 0.4
     topics:
-      - "politics"
-      - "sports"
-      - "weather"
-      - "technology"
-      - "entertainment"
-      
+      - 'politics'
+      - 'sports'
+      - 'weather'
+      - 'technology'
+      - 'entertainment'
+
   # Rant detection
   rant_detection:
     enabled: true
     threshold: 0.5
     patterns:
-      - "terrible"
-      - "awful"
-      - "horrible"
-      - "worst"
-      - "hate"
-      - "disgusting"
-      
+      - 'terrible'
+      - 'awful'
+      - 'horrible'
+      - 'worst'
+      - 'hate'
+      - 'disgusting'
+
   # Severity levels
   severity_levels:
     none: 0
     low: 1
     medium: 2
     high: 3
-    
+
   # Recommendations
   recommendations:
-    approve: "approve"
-    flag: "flag_for_review"
-    reject: "reject"
+    approve: 'approve'
+    flag: 'flag_for_review'
+    reject: 'reject'
 
 # Quality Assessment Configuration
 quality_assessment:
@@ -164,54 +164,54 @@ quality_assessment:
     readability: 0.15
     policy_compliance: 0.45
     writing_sophistication: 0.15
-    
+
   # Quality thresholds
   thresholds:
     high_quality: 0.7
     medium_quality: 0.4
     low_quality: 0.0
-    
+
   # Quality categories
   categories:
-    - "low"
-    - "medium"
-    - "high"
+    - 'low'
+    - 'medium'
+    - 'high'
 
 # Logging Configuration
 logging:
-  level: "INFO"
-  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  level: 'INFO'
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
   file:
     enabled: true
-    directory: "logs"
-    max_size: "10MB"
+    directory: 'logs'
+    max_size: '10MB'
     backup_count: 5
-    
+
   console:
     enabled: true
-    level: "INFO"
+    level: 'INFO'
 
 # Output Configuration
 output:
   # Results directory
-  results_dir: "results"
-  
+  results_dir: 'results'
+
   # Model storage
-  models_dir: "models"
-  
+  models_dir: 'models'
+
   # Reports
   reports:
     enabled: true
-    format: "html"
+    format: 'html'
     include_visualizations: true
-    
+
   # Visualizations
   visualizations:
     enabled: true
-    format: "png"
+    format: 'png'
     dpi: 300
-    style: "seaborn-v0_8"
-    
+    style: 'seaborn-v0_8'
+
   # Performance metrics
   metrics:
     save_confusion_matrix: true
@@ -224,38 +224,38 @@ performance:
   processing:
     batch_size: 1000
     max_workers: 4
-    memory_limit: "4GB"
-    
+    memory_limit: '4GB'
+
   # Caching
   caching:
     enabled: true
-    cache_dir: "cache"
-    max_size: "2GB"
-    
+    cache_dir: 'cache'
+    max_size: '2GB'
+
   # Optimization
   optimization:
     use_gpu: false
-    precision: "float32"
+    precision: 'float32'
     parallel_processing: true
 
 # API Configuration (for future deployment)
 api:
   # Server settings
   server:
-    host: "0.0.0.0"
+    host: '0.0.0.0'
     port: 8000
     workers: 4
-    
+
   # Rate limiting
   rate_limiting:
     enabled: true
     requests_per_minute: 100
-    
+
   # Authentication
   authentication:
     enabled: false
     api_key_required: false
-    
+
   # Documentation
   documentation:
     enabled: true
@@ -267,14 +267,14 @@ monitoring:
   # Performance monitoring
   performance:
     enabled: true
-    metrics_interval: 60  # seconds
-    
+    metrics_interval: 60 # seconds
+
   # Model monitoring
   model_monitoring:
     enabled: true
     drift_detection: true
     retraining_threshold: 0.05
-    
+
   # Alerting
   alerting:
     enabled: false
@@ -287,12 +287,12 @@ security:
   data_security:
     encryption_enabled: false
     data_retention_days: 365
-    
+
   # Model security
   model_security:
     model_encryption: false
     secure_inference: false
-    
+
   # Access control
   access_control:
     enabled: false
@@ -305,13 +305,13 @@ development:
   debug:
     enabled: false
     verbose_logging: false
-    
+
   # Testing
   testing:
     enabled: true
     test_data_size: 100
-    test_models: ["random_forest"]
-    
+    test_models: ['random_forest']
+
   # Development tools
   tools:
     profiling: false
