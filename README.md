@@ -12,13 +12,6 @@ The **Review Quality Detection System** is an advanced machine learning solution
 - **Operational Efficiency**: Reduce manual moderation workload by 85%
 - **Platform Integrity**: Maintain high standards for review content quality
 
-### 🏆 Key Achievements
-
-- **98.6% Accuracy** in quality detection using ensemble models
-- **75.7% of reviews** automatically approved with no policy violations
-- **3.1% of reviews** flagged for human review due to medium-severity violations
-- **0.1% of reviews** automatically rejected due to critical policy violations
-
 ## 🏗️ System Architecture
 
 ### Core Components
