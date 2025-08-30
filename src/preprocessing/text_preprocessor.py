@@ -1,13 +1,28 @@
 #!/usr/bin/env python3
 """
-Text preprocessing module for Google Maps restaurant reviews
+Text Preprocessing Module for Review Quality Detection
+
+This module provides comprehensive text preprocessing capabilities for restaurant
+review analysis, including text cleaning, feature extraction, and quality indicators
+detection.
+
+Key Features:
+- Text normalization and cleaning
+- Spam and advertisement detection
+- Irrelevant content identification
+- Sentiment analysis
+- Quality feature extraction
+
+Author: Review Quality Detection Team
+Version: 2.0.0
+Date: 2024
 """
 
 import re
 import string
 import pandas as pd
 import numpy as np
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 import logging
 from textblob import TextBlob
 import nltk
@@ -36,50 +51,96 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class TextPreprocessor:
-    """Text preprocessing for review quality detection"""
+    """
+    Advanced text preprocessing for review quality detection and content moderation.
+    
+    This class provides comprehensive text processing capabilities including:
+    - Text cleaning and normalization
+    - Spam and advertisement detection
+    - Irrelevant content identification
+    - Sentiment analysis
+    - Quality feature extraction
+    
+    The preprocessor is designed to work with restaurant reviews and focuses on
+    identifying quality indicators independent of rating data.
+    
+    Attributes:
+        remove_stopwords: Whether to remove common stop words
+        lemmatize: Whether to apply lemmatization
+        stop_words: Set of English stop words
+        lemmatizer: NLTK WordNet lemmatizer
+        spam_indicators: List of spam/advertisement patterns
+        irrelevant_indicators: List of irrelevant content patterns
+    """
     
     def __init__(self, remove_stopwords: bool = True, lemmatize: bool = True):
+        """
+        Initialize the text preprocessor.
+        
+        Args:
+            remove_stopwords: Whether to remove stop words during processing
+            lemmatize: Whether to apply lemmatization to reduce word variations
+        """
         self.remove_stopwords = remove_stopwords
         self.lemmatize = lemmatize
         self.stop_words = set(stopwords.words('english'))
         self.lemmatizer = WordNetLemmatizer()
         
-        # Common spam/advertisement indicators
+        # Comprehensive spam and advertisement indicators
         self.spam_indicators = [
             'buy now', 'click here', 'visit our website', 'call now', 'limited time',
             'special offer', 'discount', 'free trial', 'act now', 'don\'t miss out',
             'exclusive deal', 'money back guarantee', 'no risk', '100% free',
-            'earn money', 'work from home', 'make money fast', 'investment opportunity'
+            'earn money', 'work from home', 'make money fast', 'investment opportunity',
+            'cash back', 'bonus', 'commission', 'affiliate', 'referral', 'sign up',
+            'subscribe', 'newsletter', 'promotion', 'sale', 'clearance', 'liquidation'
         ]
         
-        # Irrelevant content indicators
+        # Irrelevant content indicators (non-restaurant topics)
         self.irrelevant_indicators = [
             'politics', 'election', 'president', 'government', 'news', 'weather',
-            'sports', 'football', 'basketball', 'baseball', 'movie', 'music',
-            'technology', 'computer', 'software', 'hardware', 'car', 'automotive'
+            'sports', 'football', 'basketball', 'baseball', 'soccer', 'tennis',
+            'movie', 'music', 'concert', 'theater', 'technology', 'computer',
+            'software', 'hardware', 'car', 'automotive', 'real estate', 'property',
+            'investment', 'stock market', 'cryptocurrency', 'bitcoin', 'ethereum'
         ]
     
     def clean_text(self, text: str) -> str:
-        """Clean and standardize text"""
+        """
+        Clean and standardize text for analysis.
+        
+        This method performs comprehensive text cleaning including:
+        - URL removal
+        - Email address removal
+        - Phone number removal
+        - Special character normalization
+        - Whitespace standardization
+        
+        Args:
+            text: Raw text input
+            
+        Returns:
+            Cleaned and standardized text
+        """
         if pd.isna(text) or text == '':
             return ''
         
-        # Convert to string and lowercase
+        # Convert to string and normalize case
         text = str(text).lower().strip()
         
-        # Remove URLs
+        # Remove URLs (http/https links)
         text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', text)
         
         # Remove email addresses
         text = re.sub(r'\S+@\S+', '', text)
         
-        # Remove phone numbers
+        # Remove phone numbers (various formats)
         text = re.sub(r'[\+]?[1-9][\d]{0,15}', '', text)
         
-        # Remove special characters but keep apostrophes and hyphens
+        # Remove special characters but preserve apostrophes and hyphens for contractions
         text = re.sub(r'[^\w\s\'-]', ' ', text)
         
-        # Remove extra whitespace
+        # Normalize whitespace (multiple spaces to single space)
         text = re.sub(r'\s+', ' ', text)
         
         return text.strip()

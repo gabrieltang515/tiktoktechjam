@@ -1,18 +1,26 @@
 #!/usr/bin/env python3
 """
-Demo: Review Quality Detection Model
+Review Quality Detection System - Interactive Demo
 
-This demo shows how the review quality detection model works:
-- Detects review quality based purely on text content
-- Identifies policy violations (ads, spam, rants, irrelevant content)
-- Enforces content policies
-- NO RATING DATA is used for quality assessment
+This demonstration showcases the advanced review quality detection capabilities
+of our machine learning system, highlighting the distinction between review
+quality and rating assessment.
 
-The model focuses on:
-1. Text quality and readability
-2. Policy compliance
-3. Writing sophistication
-4. Content relevance
+Key Demonstrations:
+- Text quality assessment independent of ratings
+- Policy violation detection (spam, ads, irrelevant content)
+- Content moderation and policy enforcement
+- Quality scoring based on writing standards
+
+Business Value:
+- Automated content quality assurance
+- Consistent policy enforcement
+- Improved user experience through quality content
+- Reduced manual moderation workload
+
+Author: Review Quality Detection Team
+Version: 2.0.0
+Date: 2024
 """
 
 import sys

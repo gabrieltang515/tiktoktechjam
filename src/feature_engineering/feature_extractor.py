@@ -1,6 +1,21 @@
 #!/usr/bin/env python3
 """
-Feature engineering module for review quality detection
+Advanced Feature Engineering Module for Review Quality Detection
+
+This module provides comprehensive feature extraction capabilities for review
+quality assessment, focusing purely on text characteristics and policy compliance
+without using rating data.
+
+Key Features:
+- Textual feature extraction (TF-IDF, Count Vectors)
+- Topic modeling (LDA, NMF)
+- Quality indicator calculation
+- Policy violation feature engineering
+- Sentiment analysis features
+
+Author: Review Quality Detection Team
+Version: 2.0.0
+Date: 2024
 """
 
 import pandas as pd
@@ -15,12 +30,35 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 
-# Set up logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class FeatureExtractor:
-    """Extract features for review quality detection"""
+    """
+    Advanced feature extraction for review quality detection and content analysis.
+    
+    This class provides comprehensive feature engineering capabilities including:
+    - Textual feature extraction using TF-IDF and count vectors
+    - Topic modeling for content understanding
+    - Quality indicator calculation based on text characteristics
+    - Policy violation detection features
+    - Sentiment analysis features
+    
+    The feature extractor is designed to create features that assess review
+    quality independently of rating data, focusing on writing quality,
+    content relevance, and policy compliance.
+    
+    Attributes:
+        max_features: Maximum number of TF-IDF features to extract
+        n_topics: Number of topics for topic modeling
+        tfidf_vectorizer: TF-IDF vectorizer for text features
+        count_vectorizer: Count vectorizer for word frequency
+        lda_model: Latent Dirichlet Allocation model
+        nmf_model: Non-negative Matrix Factorization model
+        scaler: Standard scaler for feature normalization
+        label_encoders: Dictionary of label encoders for categorical variables
+    """
     
     def __init__(self, max_features: int = 5000, n_topics: int = 10):
         self.max_features = max_features
